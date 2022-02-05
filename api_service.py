@@ -14,13 +14,17 @@ class ApiService:
         Arguments: None
 
         Reads Environment variables:
+            EVERACTIVE_AUTH_URL
             EVERACTIVE_API_URL
             EVERACTIVE_CLIENT_ID
             EVERACTIVE_CLIENT_SECRET
+            EVERACTIVE_AUDIENCE
         """
+        self._auth_url = os.environ.get("EVERACTIVE_AUTH_URL")
         self._base_url = os.environ.get("EVERACTIVE_API_URL")
         self._client_id = os.environ.get("EVERACTIVE_CLIENT_ID")
         self._client_secret = os.environ.get("EVERACTIVE_CLIENT_SECRET")
+        self._audience = os.environ.get("EVERACTIVE_AUDIENCE")
         self._session = None
 
         if not self._base_url or not self._client_id or not self._client_secret:
@@ -43,12 +47,12 @@ class ApiService:
             self._session.close()
 
     def _authenticate(self):
-        token_url = urljoin(self._base_url, "auth/token")
-        print(f"Authenticating to Everactive API ({token_url})")
+        print(f"Authenticating to Everactive API ({self._auth_url})")
         self._session.fetch_token(
-            token_url=token_url,
+            token_url=self._auth_url,
             client_id=self._client_id,
             client_secret=self._client_secret,
+            audience=self._audience,
             include_client_id=True,
         )
 
