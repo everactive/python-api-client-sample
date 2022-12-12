@@ -52,19 +52,17 @@ class ApiService:
             include_client_id=True,
         )
 
-    def get_steam_traps(self):
-        url = self._base_url + "steamtraps"
-        print(f"Fetching steam traps from {url}")
-
+    def get_sensors(self):
+        url = self._base_url + "ds/v1/eversensors"
+        print(f"Fetching eversensors from {url}")
         response = self._session.request("GET", url)
         result = response.json()
-
         print(f"PaginationInfo: {result['paginationInfo']}")
-
         return result["data"]
 
 
 if __name__ == "__main__":
     api = ApiService()
-    traps = api.get_steam_traps()
-    print(f"Returned {len(traps)} steam traps (first page only).")
+    sensors = api.get_sensors()
+    print(f"Returned {len(sensors)} eversensors (first page only).")
+    print(sensors)
